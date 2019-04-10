@@ -126,28 +126,28 @@ public class PlayerController : MonoBehaviour
 
     void GetInput()
     {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetAxis("Vertical") > 0.1f)
         {
             KeyUp = true;
             KeyDown = false;
             KeyRight = false;
             KeyLeft = false;
         }
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetAxis("Vertical") < -0.1f)
         {
             KeyUp = false;
             KeyDown = true;
             KeyRight = false;
             KeyLeft = false;
         }
-        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetAxis("Horizontal") < -0.1f)
         {
             KeyUp = false;
             KeyDown = false;
             KeyRight = false;
             KeyLeft = true;
         }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetAxis("Horizontal") > 0.1f)
         {
             KeyUp = false;
             KeyDown = false;
