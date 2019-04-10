@@ -7182,6 +7182,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &321002184 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5358712739621252285, guid: 883941a7ea31fc04ba97f98c87ab8c1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5358712738413799586}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &321002185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321002184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5a03ec438b4874bae9e03e64c71034, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 755482412}
+  spriteLeft: {fileID: 21300000, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
+  spriteUp: {fileID: 21300004, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
+  spriteDown: {fileID: 21300006, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
+  speed: 2
 --- !u!1 &325025006
 GameObject:
   m_ObjectHideFlags: 0
@@ -17409,6 +17432,12 @@ MonoBehaviour:
   - {fileID: 1426229320}
   - {fileID: 1217333649}
   - {fileID: 1160328169}
+--- !u!212 &755482412 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5358712739431452367, guid: 883941a7ea31fc04ba97f98c87ab8c1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5358712738413799586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &768806240
 GameObject:
   m_ObjectHideFlags: 0
@@ -48284,5 +48313,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5358712739621252227, guid: 883941a7ea31fc04ba97f98c87ab8c1b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 883941a7ea31fc04ba97f98c87ab8c1b, type: 3}

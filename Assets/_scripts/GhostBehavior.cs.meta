@@ -1,9 +1,13 @@
 fileFormatVersion: 2
-guid: 033d68e97266792478f51ad66cc20d66
+guid: da5a03ec438b4874bae9e03e64c71034
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - spriteRenderer: {instanceID: 0}
+  - spriteLeft: {fileID: 21300000, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
+  - spriteUp: {fileID: 21300004, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
+  - spriteDown: {fileID: 21300006, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
