@@ -126,49 +126,29 @@ public class PlayerController : MonoBehaviour
 
     void GetInput()
     {
-        if (Input.GetAxis("Vertical") > 0.1f)   // UP
+        if (Input.GetAxis("Vertical") > 0.1f)
         {
-            RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.up, 1, 31);
-            Debug.Log(hit2D.collider);
-            if (hit2D.collider != null)
-                return;
-            
             KeyUp = true;
             KeyDown = false;
             KeyRight = false;
             KeyLeft = false;
         }
-        else if (Input.GetAxis("Vertical") < -0.1f) // DOWN
+        else if (Input.GetAxis("Vertical") < -0.1f)
         {
-            RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.down, 1, 31);
-            Debug.Log(hit2D.collider);
-            if (hit2D.collider != null)
-                return;
-
             KeyUp = false;
             KeyDown = true;
             KeyRight = false;
             KeyLeft = false;
         }
-        else if (Input.GetAxis("Horizontal") < -0.1f) // LEFT
+        else if (Input.GetAxis("Horizontal") < -0.1f)
         {
-            RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.left, 1, 31);
-            Debug.Log(hit2D.collider);
-            if (hit2D.collider != null)
-                return;
-
             KeyUp = false;
             KeyDown = false;
             KeyRight = false;
             KeyLeft = true;
         }
-        else if (Input.GetAxis("Horizontal") > 0.1f) // RIGHT
+        else if (Input.GetAxis("Horizontal") > 0.1f)
         {
-            RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.right, 1, 31);
-            Debug.Log(hit2D.collider);
-            if (hit2D.collider != null)
-                return;
-
             KeyUp = false;
             KeyDown = false;
             KeyRight = true;
