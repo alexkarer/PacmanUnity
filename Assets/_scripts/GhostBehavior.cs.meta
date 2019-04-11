@@ -5,9 +5,9 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - spriteRenderer: {instanceID: 0}
-  - spriteLeft: {fileID: 21300000, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
-  - spriteUp: {fileID: 21300004, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
-  - spriteDown: {fileID: 21300006, guid: 8e5454ddb8f683f439770dd5340510a0, type: 3}
+  - spriteLeft: {instanceID: 0}
+  - spriteUp: {instanceID: 0}
+  - spriteDown: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

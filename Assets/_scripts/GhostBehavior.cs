@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerController;
 
 public class GhostBehavior : MonoBehaviour
 {
+    enum GhostType { Red, pink, orange, cyan};
+
+
+    [SerializeField]
+    Rigidbody2D rigid2D;
     [SerializeField]
     SpriteRenderer spriteRenderer;
 
@@ -15,76 +21,112 @@ public class GhostBehavior : MonoBehaviour
     Sprite spriteDown;
 
     [SerializeField]
+    GhostType MoveMode = GhostType.Red; 
+    [SerializeField]
     private float speed = 3.0f;
 
-    bool goUp;
-    bool goDown;
-    bool goLeft;
-    bool goRight;
+    private Direction ghostDir;
 
-    float timeStamp;
+    bool[] dirs;
+    int index = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer.sprite = spriteLeft;
         spriteRenderer.flipX = false;
-        goLeft = true;
-        timeStamp = Time.time + 1;
+        ghostDir = Direction.left;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(goLeft && timeStamp < Time.time)
+        TurnGhost();
+    }
+
+    private void FixedUpdate()
+    {
+        getDirection();
+        ghostMove();
+    }
+
+    void TurnGhost()
+    {
+        switch (ghostDir)
         {
-            goLeft = false;
-            goUp = true;
-            timeStamp = Time.time + 1;
+            case Direction.right:
+                spriteRenderer.sprite = spriteLeft;
+                spriteRenderer.flipX = true;
+                break;
+            case Direction.left:
+                spriteRenderer.sprite = spriteLeft;
+                spriteRenderer.flipX = false;
+                break;
+            case Direction.up:
+                spriteRenderer.sprite = spriteUp;
+                spriteRenderer.flipX = false;
+                break;
+            case Direction.down:
+                spriteRenderer.sprite = spriteDown;
+                spriteRenderer.flipX = false;
+                break;
         }
-        else if (goUp && timeStamp < Time.time)
+    }
+
+    void getDirection()
+    {
+        RaycastHit2D hit2D = Physics2D.Raycast(transform.position, rigid2D.transform.forward, 0.6f, 31);
+        if (hit2D.collider != null)
         {
-            goUp = false;
-            goRight = true;
-            timeStamp = Time.time + 1;
-        }
-        else if (goRight && timeStamp < Time.time)
-        {
-            goRight = false;
-            goDown = true;
-            timeStamp = Time.time + 1;
-        }
-        else if (goDown && timeStamp < Time.time)
-        {
-            goDown = false;
-            goLeft = true;
-            timeStamp = Time.time + 1;
-        }
+            RaycastHit2D hitUp;
+            RaycastHit2D hitDown;
+            RaycastHit2D hitLeft;
+            RaycastHit2D hitRight;
 
 
-        if (goLeft)
-        {
-            spriteRenderer.sprite = spriteLeft;
-            spriteRenderer.flipX = false;
-            transform.Translate(Vector3.left * Time.deltaTime * speed);
+            switch (ghostDir)
+            {
+                case Direction.right:
+                    hitUp = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
+                    hitDown = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
+                    hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
+
+                    break;
+                case Direction.left:
+                    hitUp = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
+                    hitDown = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
+                    hitRight = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
+                    break;
+                case Direction.up:
+                    hitDown = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
+                    hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
+                    hitRight = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
+                    break;
+                case Direction.down:
+                    hitUp = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
+                    hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
+                    hitRight = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
+                    break;
+            }
         }
-        else if (goRight)
+    }
+
+    void ghostMove()
+    {
+        switch (ghostDir)
         {
-            spriteRenderer.sprite = spriteLeft;
-            spriteRenderer.flipX = true;
-            transform.Translate(Vector3.right * Time.deltaTime * speed);
-        }
-        else if (goUp)
-        {
-            spriteRenderer.sprite = spriteUp;
-            spriteRenderer.flipX = false;
-            transform.Translate(Vector3.up * Time.deltaTime * speed);
-        }
-        else if (goDown)
-        {
-            spriteRenderer.sprite = spriteDown;
-            spriteRenderer.flipX = false;
-            transform.Translate(Vector3.down * Time.deltaTime * speed);
+            case Direction.right:
+                rigid2D.velocity = Vector2.right * speed;
+                break;
+            case Direction.left:
+                rigid2D.velocity = Vector2.left * speed;
+                break;
+            case Direction.up:
+                rigid2D.velocity = Vector2.up * speed;
+                break;
+            case Direction.down:
+                rigid2D.velocity = Vector2.down * speed;
+                break;
         }
     }
 }

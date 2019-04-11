@@ -21,11 +21,6 @@ public class PlayerController : MonoBehaviour
 
     private Direction pacmanDir;
 
-    bool KeyUp = false;
-    bool KeyDown = false;
-    bool KeyRight = false;
-    bool KeyLeft = false;
-
     public delegate void ScoreAddDelegate(object sender, ScoreAddEventArgs e);
     public event ScoreAddDelegate ScoreAdd = delegate { };
 
@@ -77,50 +72,39 @@ public class PlayerController : MonoBehaviour
             body2D.position = new Vector2(-14.5f, this.body2D.position.y);
         }
 
-
-        if (pacmanDir == Direction.right)
+        switch(pacmanDir)
         {
-            //body2D.MovePosition(body2D.position + Vector2.right * speed * Time.fixedDeltaTime);
-            body2D.velocity = Vector2.right * speed;
-        }
-        else if (pacmanDir == Direction.left)
-        {
-            //body2D.MovePosition(body2D.position + Vector2.left * speed * Time.fixedDeltaTime);
-            body2D.velocity = Vector2.left * speed;
-        }
-        else if (pacmanDir == Direction.up)
-        {
-            //body2D.MovePosition(body2D.position + Vector2.up * speed * Time.fixedDeltaTime);
-            body2D.velocity = Vector2.up * speed;
-        }
-        else if (pacmanDir == Direction.down)
-        {
-            //body2D.MovePosition(body2D.position + Vector2.down * speed * Time.fixedDeltaTime);
-            body2D.velocity = Vector2.down * speed;
+            case Direction.right:
+                body2D.velocity = Vector2.right * speed;
+                break;
+            case Direction.left:
+                body2D.velocity = Vector2.left * speed;
+                break;
+            case Direction.up:
+                body2D.velocity = Vector2.up * speed;
+                break;
+            case Direction.down:
+                body2D.velocity = Vector2.down * speed;
+                break;
         }
     }
 
     private void pacmanTurn()
     {
-        if (KeyUp)
+        switch (pacmanDir)
         {
-            body2D.MoveRotation(90);
-            pacmanDir = Direction.up;
-        }
-        else if (KeyDown)
-        {
-            body2D.MoveRotation(-90);
-            pacmanDir = Direction.down;
-        }
-        else if (KeyLeft)
-        {
-            body2D.MoveRotation(180);
-            pacmanDir = Direction.left;
-        }
-        else if (KeyRight)
-        {
-            body2D.MoveRotation(0);
-            pacmanDir = Direction.right;
+            case Direction.right:
+                body2D.MoveRotation(0);
+                break;
+            case Direction.left:
+                body2D.MoveRotation(180);
+                break;
+            case Direction.up:
+                body2D.MoveRotation(90);
+                break;
+            case Direction.down:
+                body2D.MoveRotation(-90);
+                break;
         }
     }
 
@@ -129,50 +113,34 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxis("Vertical") > 0.1f)   // UP
         {
             RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.up, 1, 31);
-            Debug.Log(hit2D.collider);
             if (hit2D.collider != null)
                 return;
-            
-            KeyUp = true;
-            KeyDown = false;
-            KeyRight = false;
-            KeyLeft = false;
+
+            pacmanDir = Direction.up;
         }
         else if (Input.GetAxis("Vertical") < -0.1f) // DOWN
         {
             RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.down, 1, 31);
-            Debug.Log(hit2D.collider);
             if (hit2D.collider != null)
                 return;
 
-            KeyUp = false;
-            KeyDown = true;
-            KeyRight = false;
-            KeyLeft = false;
+            pacmanDir = Direction.down;
         }
         else if (Input.GetAxis("Horizontal") < -0.1f) // LEFT
         {
             RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.left, 1, 31);
-            Debug.Log(hit2D.collider);
             if (hit2D.collider != null)
                 return;
 
-            KeyUp = false;
-            KeyDown = false;
-            KeyRight = false;
-            KeyLeft = true;
+            pacmanDir = Direction.left;
         }
         else if (Input.GetAxis("Horizontal") > 0.1f) // RIGHT
         {
             RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.right, 1, 31);
-            Debug.Log(hit2D.collider);
             if (hit2D.collider != null)
                 return;
 
-            KeyUp = false;
-            KeyDown = false;
-            KeyRight = true;
-            KeyLeft = false;
+            pacmanDir = Direction.right;
         }
     }
    
