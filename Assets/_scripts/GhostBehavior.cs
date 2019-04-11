@@ -5,7 +5,7 @@ using static PlayerController;
 
 public class GhostBehavior : MonoBehaviour
 {
-    enum GhostType { Red, pink, orange, cyan};
+    public enum GhostType { Red, pink, orange, cyan};
 
 
     [SerializeField]
@@ -78,36 +78,9 @@ public class GhostBehavior : MonoBehaviour
         RaycastHit2D hit2D = Physics2D.Raycast(transform.position, rigid2D.transform.forward, 0.6f, 31);
         if (hit2D.collider != null)
         {
-            RaycastHit2D hitUp;
-            RaycastHit2D hitDown;
-            RaycastHit2D hitLeft;
-            RaycastHit2D hitRight;
 
-
-            switch (ghostDir)
-            {
-                case Direction.right:
-                    hitUp = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
-                    hitDown = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
-                    hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
-
-                    break;
-                case Direction.left:
-                    hitUp = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
-                    hitDown = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
-                    hitRight = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
-                    break;
-                case Direction.up:
-                    hitDown = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
-                    hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
-                    hitRight = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
-                    break;
-                case Direction.down:
-                    hitUp = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
-                    hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
-                    hitRight = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
-                    break;
-            }
+            // TODO calculate availible Directions and call
+            // GhostAIDirectionChooser.GetPreferedDirections();
         }
     }
 
