@@ -8,9 +8,6 @@ public class GhostBehavior : MonoBehaviour
 {
     public enum GhostType { Red, pink, orange, cyan};
 
-
-    [SerializeField]
-    Rigidbody2D rigid2D;
     [SerializeField]
     SpriteRenderer spriteRenderer;
 
@@ -30,7 +27,6 @@ public class GhostBehavior : MonoBehaviour
 
     private Direction ghostDir;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -43,12 +39,12 @@ public class GhostBehavior : MonoBehaviour
     void Update()
     {
         TurnGhost();
+        ghostMove();
     }
 
     private void FixedUpdate()
     {
         getDirection();
-        ghostMove();
     }
 
     void TurnGhost()
@@ -76,8 +72,25 @@ public class GhostBehavior : MonoBehaviour
 
     void getDirection()
     {
-        RaycastHit2D hit2D = Physics2D.Raycast(transform.position, rigid2D.transform.forward, 0.6f, 31);
-        if (hit2D.collider != null)
+        RaycastHit2D hit2D = new RaycastHit2D();
+
+        switch (ghostDir)
+        {
+            case Direction.right:
+                hit2D = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
+                break;
+            case Direction.left:
+                hit2D = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
+                break;
+            case Direction.up:
+                hit2D = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
+                break;
+            case Direction.down:
+                hit2D = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
+                break;
+        }
+
+        if (hit2D)
         {
             List<Direction> dirList = new List<Direction>();
             
@@ -96,25 +109,35 @@ public class GhostBehavior : MonoBehaviour
                 dirList.Add(Direction.right);
 
             ghostDir = GhostAIDirectionChooser.GetPreferedDirection(
-                            MoveMode, playerRigid2D.position, rigid2D.position, dirList.ToArray());
+                            MoveMode, playerRigid2D.position, transform.position, dirList);
         }
     }
 
     void ghostMove()
     {
+
+        if (ghostDir == Direction.left && transform.position.x <= -14.5f)
+        {
+            transform.position = new Vector2(14.38f, this.transform.position.y);
+        }
+        else if (ghostDir == Direction.right && transform.position.x >= 14.38f)
+        {
+            transform.position = new Vector2(-14.5f, this.transform.position.y);
+        }
+
         switch (ghostDir)
         {
             case Direction.right:
-                rigid2D.velocity = Vector2.right * speed;
+                transform.Translate(Vector2.right * speed * Time.deltaTime);
                 break;
             case Direction.left:
-                rigid2D.velocity = Vector2.left * speed;
+                transform.Translate(Vector2.left * speed * Time.deltaTime);
                 break;
             case Direction.up:
-                rigid2D.velocity = Vector2.up * speed;
+                transform.Translate(Vector2.up * speed * Time.deltaTime);
                 break;
             case Direction.down:
-                rigid2D.velocity = Vector2.down * speed;
+                transform.Translate(Vector2.down * speed * Time.deltaTime);
                 break;
         }
     }

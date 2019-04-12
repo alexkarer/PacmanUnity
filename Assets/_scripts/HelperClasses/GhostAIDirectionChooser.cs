@@ -11,11 +11,24 @@ namespace Assets._scripts.HelperClasses
 {
     class GhostAIDirectionChooser
     {
-        public static Direction GetPreferedDirection(GhostType type, Vector2 playerPos, Vector2 ghostPos, Direction[] availibleDirections)
+        public static Direction GetPreferedDirection(GhostType type, Vector2 playerPos, Vector2 ghostPos, List<Direction> availibleDirections)
         {
-            Direction dir = Direction.down;
+            Direction dir = availibleDirections[0];
+            UnityEngine.Random.InitState(DateTime.Now.Millisecond);
 
-            // TODO calculate the prefered directions of the availible directions and send them back in order
+            switch (type)
+            {
+                case GhostType.cyan:
+                    break;
+                case GhostType.orange:
+                    break;
+                case GhostType.pink:
+                    break;
+                case GhostType.Red:
+                    int indexDir = (int)Math.Round((UnityEngine.Random.value * (availibleDirections.Count -0.01f)) - 0.499f);
+                    dir = availibleDirections[indexDir];
+                    break;
+            }
 
             return dir;
         }
