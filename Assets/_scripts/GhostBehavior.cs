@@ -9,17 +9,17 @@ public class GhostBehavior : MonoBehaviour
     public enum GhostType { Red, pink, orange, cyan};
 
     [SerializeField]
-    SpriteRenderer spriteRenderer;
+    SpriteRenderer spriteRenderer = null;
 
     [SerializeField]
-    Sprite spriteLeft;
+    Sprite spriteLeft = null;
     [SerializeField]
-    Sprite spriteUp;
+    Sprite spriteUp = null;
     [SerializeField]
-    Sprite spriteDown;
+    Sprite spriteDown = null;
 
     [SerializeField]
-    Rigidbody2D playerRigid2D;
+    Rigidbody2D playerRigid2D = null;
     [SerializeField]
     GhostType MoveMode = GhostType.Red; 
     [SerializeField]
@@ -42,9 +42,56 @@ public class GhostBehavior : MonoBehaviour
         ghostMove();
     }
 
-    private void FixedUpdate()
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        getDirection();
+        if (collision.gameObject.layer == 28)
+        {
+            RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, 1, 31);
+            RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 1, 31);
+            RaycastHit2D hitDown = Physics2D.Raycast(transform.position, Vector2.down,1, 31);
+            RaycastHit2D hitUp = Physics2D.Raycast(transform.position, Vector2.up, 1, 31);
+            bool foundDirection = false;
+
+            Direction[] preferedDirections = GhostAIDirectionChooser.GetPreferedDirections(MoveMode, playerRigid2D.position, transform.position);
+
+            for (int i = 0; i < preferedDirections.Length; i++)
+            {
+                switch (preferedDirections[i])
+                {
+                    case Direction.right:
+                        if (!hitRight)
+                        {
+                            ghostDir = Direction.right;
+                            foundDirection = true;
+                        }
+                        break;
+                    case Direction.left:
+                        if (!hitLeft)
+                        {
+                            ghostDir = Direction.left;
+                            foundDirection = true;
+                        }
+                        break;
+                    case Direction.up:
+                        if (!hitUp)
+                        {
+                            ghostDir = Direction.up;
+                            foundDirection = true;
+                        }
+                        break;
+                    case Direction.down:
+                        if (!hitDown)
+                        {
+                            ghostDir = Direction.down;
+                            foundDirection = true;
+                        }
+                        break;
+                }
+                if (foundDirection)
+                    break;
+            }
+        }
     }
 
     void TurnGhost()
@@ -67,49 +114,6 @@ public class GhostBehavior : MonoBehaviour
                 spriteRenderer.sprite = spriteDown;
                 spriteRenderer.flipX = false;
                 break;
-        }
-    }
-
-    void getDirection()
-    {
-        RaycastHit2D hit2D = new RaycastHit2D();
-
-        switch (ghostDir)
-        {
-            case Direction.right:
-                hit2D = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
-                break;
-            case Direction.left:
-                hit2D = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
-                break;
-            case Direction.up:
-                hit2D = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
-                break;
-            case Direction.down:
-                hit2D = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
-                break;
-        }
-
-        if (hit2D)
-        {
-            List<Direction> dirList = new List<Direction>();
-            
-            RaycastHit2D hitUp = Physics2D.Raycast(transform.position, Vector2.up, 0.6f, 31);
-            RaycastHit2D hitDown = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 31);
-            RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 31);
-            RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 31);
-            
-            if (!hitUp)
-                dirList.Add(Direction.up);
-            if (!hitDown)
-                dirList.Add(Direction.down);
-            if (!hitLeft)
-                dirList.Add(Direction.left);
-            if (!hitRight)
-                dirList.Add(Direction.right);
-
-            ghostDir = GhostAIDirectionChooser.GetPreferedDirection(
-                            MoveMode, playerRigid2D.position, transform.position, dirList);
         }
     }
 
