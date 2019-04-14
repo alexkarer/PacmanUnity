@@ -22,7 +22,7 @@ public class LevelHandler : MonoBehaviour
 
         pr.allPointsConsumed += Pr_allPointsConsumed;
 
-        tmp.text = "00";
+        tmp.text = "01";
     }
 
     private void Pr_allPointsConsumed(object sender, PointRegulate.allPointsConsumedEventArgs e)

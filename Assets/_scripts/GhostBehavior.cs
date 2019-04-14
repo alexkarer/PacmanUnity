@@ -27,12 +27,15 @@ public class GhostBehavior : MonoBehaviour
 
     private Direction ghostDir;
 
+    private LayerMask borderLayer;
+
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer.sprite = spriteLeft;
         spriteRenderer.flipX = false;
         ghostDir = Direction.left;
+        borderLayer = LayerMask.GetMask("Border");
     }
 
     // Update is called once per frame
@@ -45,12 +48,13 @@ public class GhostBehavior : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 28)
+        if (collision.gameObject.layer == 10)
         {
-            RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, 1, 31);
-            RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 1, 31);
-            RaycastHit2D hitDown = Physics2D.Raycast(transform.position, Vector2.down,1, 31);
-            RaycastHit2D hitUp = Physics2D.Raycast(transform.position, Vector2.up, 1, 31);
+            RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, 1, borderLayer);
+            RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 1, borderLayer);
+            RaycastHit2D hitDown = Physics2D.Raycast(transform.position, Vector2.down,1, borderLayer);
+            RaycastHit2D hitUp = Physics2D.Raycast(transform.position, Vector2.up, 1, borderLayer);
+
             bool foundDirection = false;
 
             Direction[] preferedDirections = GhostAIDirectionChooser.GetPreferedDirections(MoveMode, playerRigid2D.position, transform.position);

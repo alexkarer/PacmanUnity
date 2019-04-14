@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public enum Direction { up, down, right, left };
 
     private Direction pacmanDir;
+    private LayerMask borderLayer;
 
     public delegate void ScoreAddDelegate(object sender, ScoreAddEventArgs e);
     public event ScoreAddDelegate ScoreAdd = delegate { };
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         pacmanDir = Direction.right;
+        borderLayer = LayerMask.GetMask("Border");
     }
 
     // Update is called once per frame
@@ -112,7 +114,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetAxis("Vertical") > 0.1f)   // UP
         {
-            RaycastHit2D hit2D = Physics2D.Raycast(body2D.position, Vector2.up, 0.6f, 31);
+            RaycastHit2D hit2D = Physics2D.Raycast(body2D.position, Vector2.up, 0.6f, borderLayer);
             if (hit2D)
                 return;
 
@@ -120,7 +122,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetAxis("Vertical") < -0.1f) // DOWN
         {
-            RaycastHit2D hit2D = Physics2D.Raycast(body2D.position, Vector2.down, 0.6f, 31);
+            RaycastHit2D hit2D = Physics2D.Raycast(body2D.position, Vector2.down, 0.6f, borderLayer);
             if (hit2D)
                 return;
 
@@ -128,7 +130,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetAxis("Horizontal") < -0.1f) // LEFT
         {
-            RaycastHit2D hit2D = Physics2D.Raycast(body2D.position, Vector2.left, 0.6f, 31);
+            RaycastHit2D hit2D = Physics2D.Raycast(body2D.position, Vector2.left, 0.6f, borderLayer);
             if (hit2D)
                 return;
 
@@ -136,7 +138,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetAxis("Horizontal") > 0.1f) // RIGHT
         {
-            RaycastHit2D hit2D = Physics2D.Raycast(body2D.position, Vector2.right, 0.6f, 31);
+            RaycastHit2D hit2D = Physics2D.Raycast(body2D.position, Vector2.right, 0.6f, borderLayer);
             if (hit2D)
                 return;
 
