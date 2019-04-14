@@ -11,7 +11,7 @@ public class LevelHandler : MonoBehaviour
     private PointRegulate pr = null;
     private TextMeshPro tmp = null;
 
-    private int level = 0;
+    private int level = 1;
 
     // Start is called before the first frame update
     void Start()

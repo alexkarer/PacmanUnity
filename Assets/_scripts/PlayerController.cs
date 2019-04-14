@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public enum Direction { up, down, right, left };
 
     private Direction pacmanDir;
+
     private LayerMask borderLayer;
 
     public delegate void ScoreAddDelegate(object sender, ScoreAddEventArgs e);
@@ -27,6 +28,9 @@ public class PlayerController : MonoBehaviour
 
     public delegate void ScoreConsumedDelegate(object sender, ScoreConsumedEventArgs e);
     public event ScoreConsumedDelegate ScoreConsumed = delegate { };
+
+    public delegate void LiveLostDelegate(object sender, LiveLostEventArgs e);
+    public event LiveLostDelegate LiveLost = delegate { };
 
     private void Awake()
     {
@@ -60,6 +64,12 @@ public class PlayerController : MonoBehaviour
             collision.gameObject.transform.position = new Vector2(20, 20);
             ScoreAdd(this, new ScoreAddEventArgs(smallPointWorth));
             ScoreConsumed(this, new ScoreConsumedEventArgs());
+        }
+        else if(collision.gameObject.layer == 9)
+        {
+            LiveLost(this, new LiveLostEventArgs());
+
+            //TODO - Death Animation and Position Reset
         }
     }
 
@@ -159,5 +169,10 @@ public class PlayerController : MonoBehaviour
     public class ScoreConsumedEventArgs : EventArgs
     {
         
+    }
+
+    public class LiveLostEventArgs : EventArgs
+    {
+
     }
 }
