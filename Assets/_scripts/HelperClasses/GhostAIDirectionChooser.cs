@@ -22,10 +22,73 @@ namespace Assets._scripts.HelperClasses
             switch (type)
             {
                 case GhostType.cyan:
+
+                    sampleList.Add(Direction.up);
+                    sampleList.Add(Direction.down);
+                    sampleList.Add(Direction.left);
+                    sampleList.Add(Direction.right);
+
+                    int indexCyan = (int)(UnityEngine.Random.value * 100) % 4;
+                    directions[0] = sampleList[indexCyan];
+                    sampleList.RemoveAt(indexCyan);
+
+                    indexCyan = (int)(UnityEngine.Random.value * 100) % 3;
+                    directions[1] = sampleList[indexCyan];
+                    sampleList.RemoveAt(indexCyan);
+
+                    indexCyan = (int)(UnityEngine.Random.value * 100) % 2;
+                    directions[2] = sampleList[indexCyan];
+                    sampleList.RemoveAt(indexCyan);
+
+                    directions[3] = sampleList[0];
+                    sampleList.RemoveAt(0);
+
                     break;
                 case GhostType.orange:
+
+                    sampleList.Add(Direction.up);
+                    sampleList.Add(Direction.down);
+                    sampleList.Add(Direction.left);
+                    sampleList.Add(Direction.right);
+
+                    int indexOrange = (int)(UnityEngine.Random.value * 100) % 4;
+                    directions[0] = sampleList[indexOrange];
+                    sampleList.RemoveAt(indexOrange);
+
+                    indexOrange = (int)(UnityEngine.Random.value * 100) % 3;
+                    directions[1] = sampleList[indexOrange];
+                    sampleList.RemoveAt(indexOrange);
+
+                    indexOrange = (int)(UnityEngine.Random.value * 100) % 2;
+                    directions[2] = sampleList[indexOrange];
+                    sampleList.RemoveAt(indexOrange);
+
+                    directions[3] = sampleList[0];
+                    sampleList.RemoveAt(0);
+
                     break;
                 case GhostType.pink:
+
+                    sampleList.Add(Direction.up);
+                    sampleList.Add(Direction.down);
+                    sampleList.Add(Direction.left);
+                    sampleList.Add(Direction.right);
+
+                    int indexPink = (int)(UnityEngine.Random.value * 100) % 4;
+                    directions[0] = sampleList[indexPink];
+                    sampleList.RemoveAt(indexPink);
+
+                    indexPink = (int)(UnityEngine.Random.value * 100) % 3;
+                    directions[1] = sampleList[indexPink];
+                    sampleList.RemoveAt(indexPink);
+
+                    indexPink = (int)(UnityEngine.Random.value * 100) % 2;
+                    directions[2] = sampleList[indexPink];
+                    sampleList.RemoveAt(indexPink);
+
+                    directions[3] = sampleList[0];
+                    sampleList.RemoveAt(0);
+
                     break;
                 case GhostType.Red:
 
@@ -34,17 +97,17 @@ namespace Assets._scripts.HelperClasses
                     sampleList.Add(Direction.left);
                     sampleList.Add(Direction.right);
 
-                    int index = (int) (UnityEngine.Random.value * 100) % 4;
-                    directions[0] = sampleList[index];
-                    sampleList.RemoveAt(index);
+                    int indexRed = (int) (UnityEngine.Random.value * 100) % 4;
+                    directions[0] = sampleList[indexRed];
+                    sampleList.RemoveAt(indexRed);
 
-                    index = (int)(UnityEngine.Random.value * 100) % 3;
-                    directions[1] = sampleList[index];
-                    sampleList.RemoveAt(index);
+                    indexRed = (int)(UnityEngine.Random.value * 100) % 3;
+                    directions[1] = sampleList[indexRed];
+                    sampleList.RemoveAt(indexRed);
 
-                    index = (int)(UnityEngine.Random.value * 100) % 2;
-                    directions[2] = sampleList[index];
-                    sampleList.RemoveAt(index);
+                    indexRed = (int)(UnityEngine.Random.value * 100) % 2;
+                    directions[2] = sampleList[indexRed];
+                    sampleList.RemoveAt(indexRed);
 
                     directions[3] = sampleList[0];
                     sampleList.RemoveAt(0);

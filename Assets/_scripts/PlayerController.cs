@@ -69,7 +69,9 @@ public class PlayerController : MonoBehaviour
         {
             LiveLost(this, new LiveLostEventArgs());
 
-            //TODO - Death Animation and Position Reset
+            body2D.position = new Vector2(0, -7.5f);
+
+            //TODO - Death Animation and Guard Time
         }
     }
 

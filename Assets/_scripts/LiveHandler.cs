@@ -50,7 +50,7 @@ public class LiveHandler : MonoBehaviour
     {
         if (lives != lastlives)
         {
-            if(lives == 0)
+            if(lives == -1)
             {
                 GameOverHint.enabled = true;
                 Time.timeScale = 0;
