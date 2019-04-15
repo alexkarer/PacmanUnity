@@ -64,6 +64,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   body2D: {fileID: 1789019465995651206}
+  smallPointsParent: {fileID: 0}
+  smallPointWorth: 10
+  guardPeriodTime: 2
+  pacManState: 0
 --- !u!50 &1789019465995651206
 Rigidbody2D:
   serializedVersion: 4

@@ -5,6 +5,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    // EVENTS
+    public delegate void ScoreAddDelegate(object sender, ScoreAddEventArgs e);
+    public event ScoreAddDelegate ScoreAdd = delegate { };
+
+    public delegate void ScoreConsumedDelegate(object sender, ScoreConsumedEventArgs e);
+    public event ScoreConsumedDelegate ScoreConsumed = delegate { };
+
+    public delegate void LiveLostDelegate(object sender, LiveLostEventArgs e);
+    public event LiveLostDelegate LiveLost = delegate { };
+
+
+    // SERIALIZED FIELDS
     [SerializeField]
     private float speed = 3;
 
@@ -17,32 +30,41 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private int smallPointWorth = 20;
 
-    public enum Direction { up, down, right, left };
+    [SerializeField]
+    private float guardPeriodTime = 3;
 
+
+    // ENUMS
+    public enum Direction { up, down, right, left };
     private Direction pacmanDir;
 
+    private enum PacManStates { move, death, guard};
+    private PacManStates pacManState;
+
+    
+    // MEMBERS
     private LayerMask borderLayer;
+    private Animator animator;
 
-    public delegate void ScoreAddDelegate(object sender, ScoreAddEventArgs e);
-    public event ScoreAddDelegate ScoreAdd = delegate { };
+    private Vector2 startPosition;
 
-    public delegate void ScoreConsumedDelegate(object sender, ScoreConsumedEventArgs e);
-    public event ScoreConsumedDelegate ScoreConsumed = delegate { };
-
-    public delegate void LiveLostDelegate(object sender, LiveLostEventArgs e);
-    public event LiveLostDelegate LiveLost = delegate { };
+    private float timeStamp;
 
     private void Awake()
     {
         if (body2D == null)
-            body2D = this.GetComponent<Rigidbody2D>();
+            body2D = GetComponent<Rigidbody2D>();
+
+        animator = GetComponentInChildren<Animator>();
+        borderLayer = LayerMask.GetMask("Border");
     }
 
     // Use this for initialization
     void Start()
     {
         pacmanDir = Direction.right;
-        borderLayer = LayerMask.GetMask("Border");
+        pacManState = PacManStates.move;
+        startPosition = body2D.position;
     }
 
     // Update is called once per frame
@@ -53,25 +75,40 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        pacmanTurn();
-        pacmanMove();
+        if (pacManState == PacManStates.move || pacManState == PacManStates.guard)
+        {
+            if(pacManState == PacManStates.guard && timeStamp <= Time.time)
+            {
+                animator.ResetTrigger("PacManGuardTime");
+                animator.SetTrigger("PacManRespawnCompleted");
+                pacManState = PacManStates.move;
+            }
+            pacmanTurn();
+            pacmanMove();
+        }
+        else
+        {
+            MoveBackToOrigin();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.transform.IsChildOf(smallPointsParent))
+        if(collision.gameObject.transform.IsChildOf(smallPointsParent) && pacManState == PacManStates.move)
         {
             collision.gameObject.transform.position = new Vector2(20, 20);
             ScoreAdd(this, new ScoreAddEventArgs(smallPointWorth));
             ScoreConsumed(this, new ScoreConsumedEventArgs());
         }
-        else if(collision.gameObject.layer == 9)
+        else if(collision.gameObject.layer == 9 && pacManState == PacManStates.move)
         {
             LiveLost(this, new LiveLostEventArgs());
+            animator.ResetTrigger("PacManRespawnCompleted");
+            animator.SetTrigger("PacManDeath");
 
-            body2D.position = new Vector2(0, -7.5f);
-
-            //TODO - Death Animation and Guard Time
+            pacManState = PacManStates.death;
+            body2D.velocity = Vector2.zero;
+            body2D.isKinematic = true;
         }
     }
 
@@ -155,6 +192,24 @@ public class PlayerController : MonoBehaviour
                 return;
 
             pacmanDir = Direction.right;
+        }
+    }
+
+    private void MoveBackToOrigin()
+    {
+        body2D.position = Vector2.MoveTowards(body2D.position, startPosition, speed * 1.5f * Time.fixedDeltaTime);
+
+        if (body2D.position == startPosition)
+        {
+            pacManState = PacManStates.guard;
+            timeStamp = Time.time + guardPeriodTime;
+
+            animator.ResetTrigger("PacManDeath");
+            animator.SetTrigger("PacManGuardTime");
+
+            pacmanDir = Direction.right;
+
+            body2D.isKinematic = false;
         }
     }
    
