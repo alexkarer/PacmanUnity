@@ -16,22 +16,23 @@ public class PlayerController : MonoBehaviour
     public delegate void LiveLostDelegate(object sender, LiveLostEventArgs e);
     public event LiveLostDelegate LiveLost = delegate { };
 
+    public delegate void BigPointConsumedDelegate(object sender, BigPointConsumedEventArgs e);
+    public event BigPointConsumedDelegate BigPointConsumed = delegate { };
+
 
     // SERIALIZED FIELDS
     [SerializeField]
     private float speed = 3;
-
     [SerializeField]
     private Rigidbody2D body2D = null;
-
     [SerializeField]
-    private Transform smallPointsParent = null;
-
+    private int smallPointWorth = 10;
     [SerializeField]
-    private int smallPointWorth = 20;
-
+    private int bigPointWorth = 100;
     [SerializeField]
     private float guardPeriodTime = 3;
+    [SerializeField]
+    private float ghostVulnerableTime = 6;
 
 
     // ENUMS
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
     private float timeStamp;
 
+
+    // UNITY METHODS
     private void Awake()
     {
         if (body2D == null)
@@ -75,16 +78,16 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (pacManState == PacManStates.move || pacManState == PacManStates.guard)
+        if (pacManState == PacManStates.move)
         {
-            if(pacManState == PacManStates.guard && timeStamp <= Time.time)
-            {
-                animator.ResetTrigger("PacManGuardTime");
-                animator.SetTrigger("PacManRespawnCompleted");
-                pacManState = PacManStates.move;
-            }
             pacmanTurn();
             pacmanMove();
+        }
+        else if (pacManState == PacManStates.guard && timeStamp <= Time.time)
+        {
+            animator.ResetTrigger("PacManGuardTime");
+            animator.SetTrigger("PacManRespawnCompleted");
+            pacManState = PacManStates.move;
         }
         else
         {
@@ -94,13 +97,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.transform.IsChildOf(smallPointsParent) && pacManState == PacManStates.move)
+        if(collision.gameObject.layer == 13 && pacManState == PacManStates.move || pacManState == PacManStates.guard)
         {
             collision.gameObject.transform.position = new Vector2(20, 20);
             ScoreAdd(this, new ScoreAddEventArgs(smallPointWorth));
             ScoreConsumed(this, new ScoreConsumedEventArgs());
         }
-        else if(collision.gameObject.layer == 9 && pacManState == PacManStates.move)
+        else if(collision.gameObject.layer == 12 && pacManState == PacManStates.move || pacManState == PacManStates.guard)
+        {
+            collision.gameObject.transform.position = new Vector2(20, 20);
+            ScoreAdd(this, new ScoreAddEventArgs(bigPointWorth));
+            BigPointConsumed(this, new BigPointConsumedEventArgs(ghostVulnerableTime));
+        }
+        else if(collision.gameObject.layer == 9 && pacManState == PacManStates.move 
+            && collision.gameObject.GetComponent<GhostBehavior>().ghostState == GhostBehavior.GhostStates.Regular)
         {
             LiveLost(this, new LiveLostEventArgs());
             animator.ResetTrigger("PacManRespawnCompleted");
@@ -112,6 +122,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    // PRIVATE METHODS
     private void pacmanMove()
     {
         if(pacmanDir == Direction.left && body2D.position.x <= -14.5f)
@@ -213,6 +225,8 @@ public class PlayerController : MonoBehaviour
         }
     }
    
+
+    // EVENT ARGS
     public class ScoreAddEventArgs : EventArgs
     {
         public readonly int score;
@@ -231,5 +245,15 @@ public class PlayerController : MonoBehaviour
     public class LiveLostEventArgs : EventArgs
     {
 
+    }
+
+    public class BigPointConsumedEventArgs : EventArgs
+    {
+        public readonly float ghostVulnerableTime;
+
+        public BigPointConsumedEventArgs(float ghostVulnerableTime)
+        {
+            this.ghostVulnerableTime = ghostVulnerableTime;
+        }
     }
 }
