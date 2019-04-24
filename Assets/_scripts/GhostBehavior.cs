@@ -49,7 +49,7 @@ public class GhostBehavior : MonoBehaviour
     List<Direction> sampleList = new List<Direction>();
 
     private float spawnTime;
-    private float timeStamp;
+    private float timeStampVulnerable;
 
     private float blinkTimeStamp;
     private bool blinkingFlag = false;
@@ -71,7 +71,7 @@ public class GhostBehavior : MonoBehaviour
     {
         ghostState = GhostStates.Vulnerable;
         spriteRenderer.sprite = spriteVulnerable1;
-        timeStamp = Time.time + e.ghostVulnerableTime;
+        timeStampVulnerable = Time.time + e.ghostVulnerableTime;
     }
 
     // Start is called before the first frame update
@@ -287,7 +287,7 @@ public class GhostBehavior : MonoBehaviour
 
     void GhostVulnerableController()
     {
-        if (Time.time >= ((timeStamp * 3) / 4))
+        if (Time.time >= ((timeStampVulnerable * 3) / 4))
         {
             if (!blinkingFlag)
             {
@@ -303,7 +303,7 @@ public class GhostBehavior : MonoBehaviour
             }
         }
 
-        if (Time.time >= timeStamp)
+        if (Time.time >= timeStampVulnerable)
         {
             ghostGate.enabled = true;
             ghostState = GhostStates.Regular;
