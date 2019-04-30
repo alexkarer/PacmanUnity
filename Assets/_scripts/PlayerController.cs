@@ -83,11 +83,16 @@ public class PlayerController : MonoBehaviour
             pacmanTurn();
             pacmanMove();
         }
-        else if (pacManState == PacManStates.guard && timeStamp <= Time.time)
+        else if (pacManState == PacManStates.guard)
         {
-            animator.ResetTrigger("PacManGuardTime");
-            animator.SetTrigger("PacManRespawnCompleted");
-            pacManState = PacManStates.move;
+            if (timeStamp <= Time.time)
+            {
+                animator.ResetTrigger("PacManGuardTime");
+                animator.SetTrigger("PacManRespawnCompleted");
+                pacManState = PacManStates.move;
+            }
+            pacmanTurn();
+            pacmanMove();
         }
         else
         {
