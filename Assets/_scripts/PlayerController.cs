@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
         if (pacManState == PacManStates.move)
         {
             pacmanTurn();
-            pacmanMove();
+            playerMove();
         }
         else if (pacManState == PacManStates.guard)
         {
@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
                 pacManState = PacManStates.move;
             }
             pacmanTurn();
-            pacmanMove();
+            playerMove();
         }
         else
         {
@@ -147,7 +147,11 @@ public class PlayerController : MonoBehaviour
 
 
     // PRIVATE METHODS
-    private void pacmanMove()
+
+    /// <summary>
+    /// moves the player according to the direction with the physics engine
+    /// </summary>
+    private void playerMove()
     {
         if(pacmanDir == Direction.left && body2D.position.x <= -14.5f)
         {
@@ -175,6 +179,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// rotates the pacman model according to the direction
+    /// </summary>
     private void pacmanTurn()
     {
         switch (pacmanDir)
@@ -194,6 +201,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// changes the direction of the pacman according to the unity input axes
+    /// </summary>
     void GetInput()
     {
         if (Input.GetAxis("Vertical") > 0.1f)   // UP
@@ -230,6 +240,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// moves the player back to the starting point while also playing the death animation
+    /// </summary>
     private void MoveBackToOrigin()
     {
         body2D.position = Vector2.MoveTowards(body2D.position, startPosition, speed * 1.5f * Time.fixedDeltaTime);

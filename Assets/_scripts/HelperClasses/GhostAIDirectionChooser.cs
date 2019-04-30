@@ -14,6 +14,14 @@ namespace Assets._scripts.HelperClasses
     {
         static List<Direction> sampleList = new List<Direction>();
 
+
+        /// <summary>
+        /// returns the prefered direction of the chost according to the ghost type
+        /// </summary>
+        /// <param name="type">The type (color) of the ghost</param>
+        /// <param name="playerPos">the current position of the player</param>
+        /// <param name="ghostPos">the current position of the ghost</param>
+        /// <returns></returns>
         public static Direction[] GetPreferedDirections(GhostType type, Vector2 playerPos, Vector2 ghostPos)
         {
             Direction[] directions = new Direction[4];

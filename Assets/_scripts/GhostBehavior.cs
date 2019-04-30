@@ -193,6 +193,11 @@ public class GhostBehavior : MonoBehaviour
 
 
     // PRIVATE METHODS
+
+
+    /// <summary>
+    /// rotates the ghost model according to the ghost direction
+    /// </summary>
     void TurnGhost()
     {
         switch (ghostDir)
@@ -216,6 +221,10 @@ public class GhostBehavior : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// moves the ghost according to the current direction
+    /// </summary>
     void GhostMove()
     {
 
@@ -245,6 +254,9 @@ public class GhostBehavior : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// moves the ghost in the spawn box
+    /// </summary>
     void GhostMoveBeforeSpawn()
     {
         sampleList.Clear();
@@ -272,6 +284,10 @@ public class GhostBehavior : MonoBehaviour
         ghostDir = sampleList[index];
     }
 
+
+    /// <summary>
+    /// moves the ghost out of the spawn box
+    /// </summary>
     void GhostSpawn()
     {
         if (transform.position.x != 0)
@@ -309,6 +325,10 @@ public class GhostBehavior : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// controls model according to the current vulnerability status
+    /// </summary>
     void GhostVulnerableController()
     {
         if (Time.time >= timeStampVulnerable + (vulnerableTime * 0.75f))
