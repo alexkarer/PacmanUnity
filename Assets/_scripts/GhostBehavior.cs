@@ -50,6 +50,7 @@ public class GhostBehavior : MonoBehaviour
 
     private float spawnTime;
     private float timeStampVulnerable;
+    private float vulnerableTime;
 
     private float blinkTimeStamp;
     private bool blinkingFlag = false;
@@ -72,7 +73,9 @@ public class GhostBehavior : MonoBehaviour
         blinkTimeStamp = 0.0f;
         ghostState = GhostStates.Vulnerable;
         spriteRenderer.sprite = spriteVulnerable1;
-        timeStampVulnerable = Time.time + e.ghostVulnerableTime;
+        timeStampVulnerable = Time.time;
+        vulnerableTime = e.ghostVulnerableTime;
+        speed = (speed * 3) / 4;
     }
 
     // Start is called before the first frame update
@@ -138,7 +141,7 @@ public class GhostBehavior : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 10)
+        if (collision.gameObject.layer == 10 && (ghostState == GhostStates.Regular || ghostState == GhostStates.Vulnerable))
         {
             RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, 1, borderLayer);
             RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, Vector2.left, 1, borderLayer);
@@ -282,13 +285,33 @@ public class GhostBehavior : MonoBehaviour
 
         if (transform.position.x == 0 && transform.position.y == 4.5f)
         {
-            ghostState = GhostStates.Regular;
+            ghostGate.enabled = true;
+            bool foundDirection = false;
+            Direction[] preferedDirections = GhostAIDirectionChooser.GetPreferedDirections(MoveMode, playerRigid2D.position, transform.position);
+
+            for (int i = 0; i < preferedDirections.Length; i++)
+            {
+                switch (preferedDirections[i])
+                {
+                    case Direction.right:
+                        ghostDir = Direction.right;
+                        foundDirection = true;
+                        break;
+                    case Direction.left:
+                        ghostDir = Direction.left;
+                        foundDirection = true;
+                        break;
+                }
+                if (foundDirection)
+                    break;
+            }
+                ghostState = GhostStates.Regular;
         }
     }
 
     void GhostVulnerableController()
     {
-        if (Time.time >= timeStampVulnerable * 0.75f)
+        if (Time.time >= timeStampVulnerable + (vulnerableTime * 0.75f))
         {
             if (!blinkingFlag && Time.time >= blinkTimeStamp)
             {
@@ -306,11 +329,11 @@ public class GhostBehavior : MonoBehaviour
             }
         }
 
-        if (Time.time >= timeStampVulnerable)
+        if (Time.time >= vulnerableTime + timeStampVulnerable)
         {
-            ghostGate.enabled = true;
             ghostState = GhostStates.Regular;
             ghostDir = Direction.left;
+            speed = (speed * 4) / 3;
         }
     }
 }

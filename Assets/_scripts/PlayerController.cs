@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private int bigPointWorth = 100;
     [SerializeField]
+    private int ghostWorth = 250;
+    [SerializeField]
     private float guardPeriodTime = 3;
     [SerializeField]
     private float ghostVulnerableTime = 6;
@@ -124,6 +126,18 @@ public class PlayerController : MonoBehaviour
             pacManState = PacManStates.death;
             body2D.velocity = Vector2.zero;
             body2D.isKinematic = true;
+        }
+        else if (collision.gameObject.layer == 9 && pacManState == PacManStates.move
+            && collision.gameObject.GetComponent<GhostBehavior>().ghostState == GhostBehavior.GhostStates.Vulnerable)
+        {
+            ScoreAdd(this, new ScoreAddEventArgs(ghostWorth));
+            
+            //TODO ghost death 
+
+
+
+
+
         }
     }
 

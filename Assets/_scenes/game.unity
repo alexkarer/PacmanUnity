@@ -56744,6 +56744,11 @@ PrefabInstance:
       propertyPath: smallPointWorth
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 1789019465995651201, guid: a842ac6700089e14399f90a0146a08bb,
+        type: 3}
+      propertyPath: ghostVulnerableTime
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1789019466207705181, guid: a842ac6700089e14399f90a0146a08bb,
         type: 3}
       propertyPath: m_Color.r
