@@ -287,7 +287,7 @@ public class GhostBehavior : MonoBehaviour
 
     void GhostVulnerableController()
     {
-        if (Time.time >= ((timeStampVulnerable * 3) / 4))
+        if (Time.time >= timeStampVulnerable * 0.75f)
         {
             if (!blinkingFlag)
             {
