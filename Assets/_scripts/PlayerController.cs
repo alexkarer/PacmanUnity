@@ -106,12 +106,14 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.gameObject.layer == 13 && pacManState == PacManStates.move || pacManState == PacManStates.guard)
         {
+            // Collision with a small point
             collision.gameObject.transform.position = new Vector2(20, 20);
             ScoreAdd(this, new ScoreAddEventArgs(smallPointWorth));
             ScoreConsumed(this, new ScoreConsumedEventArgs());
         }
         else if(collision.gameObject.layer == 12 && pacManState == PacManStates.move || pacManState == PacManStates.guard)
         {
+            // Collision with a big point
             collision.gameObject.transform.position = new Vector2(20, 20);
             ScoreAdd(this, new ScoreAddEventArgs(bigPointWorth));
             BigPointConsumed(this, new BigPointConsumedEventArgs(ghostVulnerableTime));
@@ -119,6 +121,7 @@ public class PlayerController : MonoBehaviour
         else if(collision.gameObject.layer == 9 && pacManState == PacManStates.move 
             && collision.gameObject.GetComponent<GhostBehavior>().ghostState == GhostBehavior.GhostStates.Regular)
         {
+            // Collision with a Ghost in regular mode
             LiveLost(this, new LiveLostEventArgs());
             animator.ResetTrigger("PacManRespawnCompleted");
             animator.SetTrigger("PacManDeath");
@@ -130,6 +133,7 @@ public class PlayerController : MonoBehaviour
         else if (collision.gameObject.layer == 9 && pacManState == PacManStates.move
             && collision.gameObject.GetComponent<GhostBehavior>().ghostState == GhostBehavior.GhostStates.Vulnerable)
         {
+            //Collision with a Ghost in the vulnerable state
             ScoreAdd(this, new ScoreAddEventArgs(ghostWorth));
             
             //TODO ghost death 

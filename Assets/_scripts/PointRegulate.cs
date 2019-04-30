@@ -11,6 +11,9 @@ public class PointRegulate : MonoBehaviour
     [SerializeField]
     List<GameObject> smallPoints = null;
 
+    [SerializeField]
+    List<GameObject> bigPoints = null;
+
 
     public delegate void allPointsConsumedDelegate(object sender, allPointsConsumedEventArgs e);
     public event allPointsConsumedDelegate allPointsConsumed = delegate { };
@@ -19,6 +22,7 @@ public class PointRegulate : MonoBehaviour
     PlayerController pc = null;
 
     List<Vector2> pointPositions = new List<Vector2>();
+    List<Vector2> bigPointPositions = new List<Vector2>();
 
     private int scoreConsumedCounter = 0;
 
@@ -30,10 +34,35 @@ public class PointRegulate : MonoBehaviour
 
         pc = player.GetComponent<PlayerController>();
         pc.ScoreConsumed += Pc_ScoreConsumed;
+        pc.BigPointConsumed += Pc_BigPointConsumed;
 
         foreach(var point in smallPoints)
         {
             pointPositions.Add(new Vector2(point.transform.position.x, point.transform.position.y));
+        }
+
+        foreach (var bigPoint in bigPoints)
+        {
+            bigPointPositions.Add(new Vector2(bigPoint.transform.position.x, bigPoint.transform.position.y));
+        }
+    }
+
+    private void Pc_BigPointConsumed(object sender, PlayerController.BigPointConsumedEventArgs e)
+    {
+        scoreConsumedCounter++;
+
+        if (scoreConsumedCounter >= smallPoints.Count + bigPoints.Count)
+        {
+            scoreConsumedCounter = 0;
+            for (int i = 0; i < smallPoints.Count; i++)
+            {
+                smallPoints[i].transform.position = pointPositions[i];
+            }
+            for(int i = 0; i < bigPoints.Count; i++)
+            {
+                bigPoints[i].transform.position = bigPointPositions[i];
+            }
+            allPointsConsumed(this, new allPointsConsumedEventArgs());
         }
     }
 
@@ -41,12 +70,16 @@ public class PointRegulate : MonoBehaviour
     {
         scoreConsumedCounter++;
 
-        if(scoreConsumedCounter >= smallPoints.Capacity)
+        if(scoreConsumedCounter >= smallPoints.Count + bigPoints.Count)
         {
             scoreConsumedCounter = 0;
-            for(int i=0; i < smallPoints.Capacity; i++)
+            for(int i=0; i < smallPoints.Count; i++)
             {
                 smallPoints[i].transform.position = pointPositions[i];
+            }
+            for (int i = 0; i < bigPoints.Count; i++)
+            {
+                bigPoints[i].transform.position = bigPointPositions[i];
             }
             allPointsConsumed(this, new allPointsConsumedEventArgs());
         }
