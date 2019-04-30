@@ -69,6 +69,7 @@ public class GhostBehavior : MonoBehaviour
 
     private void Pc_BigPointConsumed(object sender, BigPointConsumedEventArgs e)
     {
+        blinkTimeStamp = 0.0f;
         ghostState = GhostStates.Vulnerable;
         spriteRenderer.sprite = spriteVulnerable1;
         timeStampVulnerable = Time.time + e.ghostVulnerableTime;
@@ -289,7 +290,7 @@ public class GhostBehavior : MonoBehaviour
     {
         if (Time.time >= timeStampVulnerable * 0.75f)
         {
-            if (!blinkingFlag)
+            if (!blinkingFlag && Time.time >= blinkTimeStamp)
             {
                 blinkTimeStamp = Time.time + 0.2f;
                 blinkingFlag = true;
@@ -298,7 +299,9 @@ public class GhostBehavior : MonoBehaviour
             }
             else if (blinkingFlag && Time.time >= blinkTimeStamp)
             {
+                blinkTimeStamp = Time.time + 0.2f;
                 blinkingFlag = false;
+
                 spriteRenderer.sprite = spriteVulnerable1;
             }
         }
